@@ -3,12 +3,6 @@
 
 > Meet strangers. Have real conversations. Built with WebRTC, Swift, and SwiftUI.
 
----
-
-## 🎥 Demo
-
-
-https://github.com/prudh-vi/pairup-ios/assets/demo.mp4
 
 
 ---
