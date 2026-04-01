@@ -2,8 +2,8 @@ import SwiftUI
 import Combine
 
 struct MatchmakingView: View {
+    @StateObject private var socket = SocketService.shared
     @State private var dots = ""
-    @State private var isMatched = false
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -37,14 +37,14 @@ struct MatchmakingView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                     
-                    Text("This won't take long")
+                    Text(socket.isConnected ? "Connected to server..." : "Connecting...")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 
                 // Cancel button
                 Button(action: {
-                    // go back
+                    socket.disconnect()
                 }) {
                     Text("Cancel")
                         .font(.subheadline)
@@ -59,15 +59,21 @@ struct MatchmakingView: View {
             }
         }
         .navigationBarHidden(true)
+        .onAppear {
+            // Connect and start finding match!
+            socket.connect()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                socket.startChat()
+            }
+        }
         .onReceive(timer) { _ in
-            // Animate dots
             if dots.count >= 3 {
                 dots = ""
             } else {
                 dots += "."
             }
         }
-        .navigationDestination(isPresented: $isMatched) {
+        .navigationDestination(isPresented: $socket.isMatched) {
             CallView()
         }
     }

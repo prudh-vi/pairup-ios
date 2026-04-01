@@ -1,43 +1,52 @@
-//
-//  CallView.swift
-//  pairup-ios
-//
-//  Created by Prudhvii on 01/04/26.
-//
-
 import SwiftUI
+import WebRTC
 
 struct CallView: View {
-    @State private var isMuted = false
-    @State private var isCameraOff = false
-    @State private var isDisconnected = false
+    @StateObject private var socket = SocketService.shared
+    @StateObject private var webrtc = WebRTCService.shared
+    @State private var showChat = false
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             
-            // Remote video (full screen)
+            // Remote video
             ZStack {
-                Color(white: 0.1)
-                    .ignoresSafeArea()
-                
-                Image(systemName: "person.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.gray.opacity(0.5))
+                if webrtc.remoteVideoTrack != nil {
+                    RTCVideoViewRepresentable(videoTrack: webrtc.remoteVideoTrack)
+                        .ignoresSafeArea()
+                } else {
+                    Color(white: 0.08).ignoresSafeArea()
+                    VStack(spacing: 12) {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 80))
+                            .foregroundColor(.gray.opacity(0.3))
+                        Text("Connecting...")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                    }
+                }
             }
             
-            // Local video (picture in picture)
+            // Local video PIP
             VStack {
                 HStack {
                     Spacer()
                     ZStack {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(white: 0.2))
+                            .fill(Color(white: 0.15))
                             .frame(width: 100, height: 140)
                         
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(.gray)
+                        if webrtc.localVideoTrack != nil {
+                            RTCVideoViewRepresentable(videoTrack: webrtc.localVideoTrack)
+                                .frame(width: 100, height: 140)
+                                .cornerRadius(12)
+                        } else {
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 30))
+                                .foregroundColor(.gray.opacity(0.5))
+                        }
                     }
                     .padding(.top, 60)
                     .padding(.trailing, 20)
@@ -45,33 +54,36 @@ struct CallView: View {
                 Spacer()
             }
             
-            // Controls at bottom
+            // Controls
             VStack {
                 Spacer()
-                
-                HStack(spacing: 30) {
+                HStack(spacing: 25) {
                     
-                    // Mute button
+                    // End Call
                     Button(action: {
-                        isMuted.toggle()
+                        webrtc.cleanup()
+                        socket.disconnect()
+                        dismiss()
                     }) {
                         VStack(spacing: 8) {
-                            Image(systemName: isMuted ? "mic.slash.fill" : "mic.fill")
+                            Image(systemName: "phone.down.fill")
                                 .font(.system(size: 22))
-                                .foregroundColor(isMuted ? .red : .white)
+                                .foregroundColor(.white)
                                 .frame(width: 60, height: 60)
-                                .background(Color.white.opacity(0.15))
+                                .background(Color.red)
                                 .clipShape(Circle())
-                            
-                            Text(isMuted ? "Unmute" : "Mute")
+                            Text("End")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
                     }
                     
-                    // Skip button
+                    // Skip
                     Button(action: {
-                        isDisconnected = true
+                        webrtc.cleanup()
+                        socket.skip()
+                        socket.startChat()
+                        dismiss()
                     }) {
                         VStack(spacing: 8) {
                             Image(systemName: "forward.fill")
@@ -80,26 +92,22 @@ struct CallView: View {
                                 .frame(width: 70, height: 70)
                                 .background(Color.orange)
                                 .clipShape(Circle())
-                            
                             Text("Skip")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
                     }
                     
-                    // Camera button
-                    Button(action: {
-                        isCameraOff.toggle()
-                    }) {
+                    // Chat
+                    Button(action: { showChat = true }) {
                         VStack(spacing: 8) {
-                            Image(systemName: isCameraOff ? "video.slash.fill" : "video.fill")
+                            Image(systemName: "bubble.left.fill")
                                 .font(.system(size: 22))
-                                .foregroundColor(isCameraOff ? .red : .white)
+                                .foregroundColor(.white)
                                 .frame(width: 60, height: 60)
                                 .background(Color.white.opacity(0.15))
                                 .clipShape(Circle())
-                            
-                            Text(isCameraOff ? "Show" : "Hide")
+                            Text("Chat")
                                 .font(.caption)
                                 .foregroundColor(.gray)
                         }
@@ -109,9 +117,31 @@ struct CallView: View {
             }
         }
         .navigationBarHidden(true)
-        .alert("Call Ended", isPresented: $isDisconnected) {
-            Button("Find New Match") { }
-            Button("Go Home", role: .cancel) { }
+        .sheet(isPresented: $showChat) {
+            ChatView()
+        }
+        .onChange(of: socket.partnerLeft) { left in
+            if left {
+                webrtc.cleanup()
+                dismiss()
+            }
+        }
+    }
+}
+
+// MARK: - RTCVideoView wrapper for SwiftUI
+struct RTCVideoViewRepresentable: UIViewRepresentable {
+    var videoTrack: RTCVideoTrack?
+    
+    func makeUIView(context: Context) -> RTCMTLVideoView {
+        let view = RTCMTLVideoView()
+        view.videoContentMode = .scaleAspectFill
+        return view
+    }
+    
+    func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
+        if let track = videoTrack {
+            track.add(uiView)
         }
     }
 }

@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		18C48FA62F7CD02E00AD1506 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 18C48FA52F7CD02E00AD1506 /* SocketIO */; };
+		18C48FAC2F7CDD7000AD1506 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 18C48FAB2F7CDD7000AD1506 /* WebRTC */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		18C48EF72F7C516800AD1506 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C48FA62F7CD02E00AD1506 /* SocketIO in Frameworks */,
+				18C48FAC2F7CDD7000AD1506 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +85,7 @@
 				18C48EEB2F7C516600AD1506 /* pairup-ios */,
 				18C48EF92F7C516800AD1506 /* pairup-iosTests */,
 				18C48F032F7C516800AD1506 /* pairup-iosUITests */,
+				18C48FA42F7CD02E00AD1506 /* Frameworks */,
 				18C48EEA2F7C516600AD1506 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +98,13 @@
 				18C48F002F7C516800AD1506 /* pairup-iosUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		18C48FA42F7CD02E00AD1506 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +127,8 @@
 			);
 			name = "pairup-ios";
 			packageProductDependencies = (
+				18C48FA52F7CD02E00AD1506 /* SocketIO */,
+				18C48FAB2F7CDD7000AD1506 /* WebRTC */,
 			);
 			productName = "pairup-ios";
 			productReference = 18C48EE92F7C516600AD1506 /* pairup-ios.app */;
@@ -195,6 +212,10 @@
 			);
 			mainGroup = 18C48EE02F7C516600AD1506;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				18C48F8B2F7CCBB600AD1506 /* XCRemoteSwiftPackageReference "socket" */,
+				18C48FAA2F7CDD6500AD1506 /* XCRemoteSwiftPackageReference "WebRTC" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18C48EEA2F7C516600AD1506 /* Products */;
 			projectDirPath = "";
@@ -397,8 +418,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "PairUp uses your camera so you can video chat with matches.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "PairUp uses your microphone so you can talk with matches.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "PairUp needs camera for video calls";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "PairUp needs microphone for audio calls";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -430,8 +451,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "PairUp uses your camera so you can video chat with matches.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "PairUp uses your microphone so you can talk with matches.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "PairUp needs camera for video calls";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "PairUp needs microphone for audio calls";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -574,6 +595,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18C48F8B2F7CCBB600AD1506 /* XCRemoteSwiftPackageReference "socket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		18C48FAA2F7CDD6500AD1506 /* XCRemoteSwiftPackageReference "WebRTC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stasel/WebRTC";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 146.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		18C48FA52F7CD02E00AD1506 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18C48F8B2F7CCBB600AD1506 /* XCRemoteSwiftPackageReference "socket" */;
+			productName = SocketIO;
+		};
+		18C48FAB2F7CDD7000AD1506 /* WebRTC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18C48FAA2F7CDD6500AD1506 /* XCRemoteSwiftPackageReference "WebRTC" */;
+			productName = WebRTC;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 18C48EE12F7C516600AD1506 /* Project object */;
 }

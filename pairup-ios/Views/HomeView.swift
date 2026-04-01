@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var isSearching = false
+    
     
     var body: some View {
         ZStack {
@@ -22,9 +22,7 @@ struct HomeView: View {
                 }
                 
                 // Button
-                Button(action: {
-                    isSearching = true
-                }) {
+                NavigationLink(destination: MatchmakingView()) {
                     Text("Find Someone")
                         .font(.headline)
                         .foregroundColor(.black)
@@ -36,8 +34,6 @@ struct HomeView: View {
                 .padding(.horizontal, 40)
             }
         }
-        .navigationDestination(isPresented: $isSearching) {
-            MatchmakingView()
-        }
+        
     }
 }
