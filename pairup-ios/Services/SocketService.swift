@@ -45,6 +45,9 @@ class SocketService: ObservableObject {
                 self.isConnected = true
                 self.mySocketId = self.socket.sid ?? ""
                 print("✅ Connected! ID: \(self.mySocketId)")
+                
+                // Start chat immediately after connected!
+                self.startChat()
             }
         }
         

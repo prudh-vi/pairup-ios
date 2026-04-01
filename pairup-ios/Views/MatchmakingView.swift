@@ -2,7 +2,9 @@ import SwiftUI
 import Combine
 
 struct MatchmakingView: View {
-    @StateObject private var socket = SocketService.shared
+    @ObservedObject private var socket = SocketService.shared
+    @ObservedObject private var webrtc = WebRTCService.shared
+
     @State private var dots = ""
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
@@ -62,9 +64,7 @@ struct MatchmakingView: View {
         .onAppear {
             // Connect and start finding match!
             socket.connect()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                socket.startChat()
-            }
+            
         }
         .onReceive(timer) { _ in
             if dots.count >= 3 {

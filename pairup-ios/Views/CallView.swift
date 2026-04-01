@@ -2,8 +2,9 @@ import SwiftUI
 import WebRTC
 
 struct CallView: View {
-    @StateObject private var socket = SocketService.shared
-    @StateObject private var webrtc = WebRTCService.shared
+    @ObservedObject private var socket = SocketService.shared
+    @ObservedObject private var webrtc = WebRTCService.shared
+
     @State private var showChat = false
     @Environment(\.dismiss) var dismiss
     
@@ -132,16 +133,23 @@ struct CallView: View {
 // MARK: - RTCVideoView wrapper for SwiftUI
 struct RTCVideoViewRepresentable: UIViewRepresentable {
     var videoTrack: RTCVideoTrack?
-    
+
     func makeUIView(context: Context) -> RTCMTLVideoView {
-        let view = RTCMTLVideoView()
+        let view = RTCMTLVideoView(frame: .zero)
         view.videoContentMode = .scaleAspectFill
+        view.backgroundColor = .black
         return view
     }
-    
+
     func updateUIView(_ uiView: RTCMTLVideoView, context: Context) {
-        if let track = videoTrack {
+        guard let track = videoTrack else { return }
+        DispatchQueue.main.async {
             track.add(uiView)
         }
+    }
+    
+    static func dismantleUIView(_ uiView: RTCMTLVideoView, coordinator: ()) {
+        // Clean up renderer when view disappears
+        uiView.renderFrame(nil)
     }
 }

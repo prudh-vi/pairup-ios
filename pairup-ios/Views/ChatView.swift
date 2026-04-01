@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ChatView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject private var socket = SocketService.shared
+    @ObservedObject private var socket = SocketService.shared
+    @ObservedObject private var webrtc = WebRTCService.shared
+
     @State private var message = ""
     
     var body: some View {
