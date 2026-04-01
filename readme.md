@@ -153,14 +153,9 @@ CMD + R → Build and run on simulator or real device
 
 ## 🌐 Backend
 
-The signaling server is open source →
+The signaling server is here →
 
 👉 [github.com/prudh-vi/pairup-server](https://github.com/prudh-vi/pairup-server)
-
-```
-Production URL → https://backxpairup.zrxprudhvi.tech
-TURN Server    → 34.126.207.137:3478
-```
 
 ---
 
@@ -178,15 +173,3 @@ TURN Server    → 34.126.207.137:3478
 | `client:skip` | Client → Server | Skip current partner |
 | `server:partner_left` | Server → Client | Partner disconnected |
 
----
-
-## 👨‍💻 Author
-
-**Prudhviraj KB**
-- GitHub → [github.com/prudh-vi](https://github.com/prudh-vi)
-- Portfolio → [zrxprudhvi.tech](https://www.zrxprudhvi.tech)
-- LinkedIn → [linkedin.com/in/prudhvirajkb](https://linkedin.com/in/prudhvirajkb)
-
----
-
-*Built with 🧪 and 228 IQ — Senku would approve*
