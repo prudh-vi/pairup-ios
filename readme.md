@@ -153,9 +153,13 @@ CMD + R → Build and run on simulator or real device
 
 ## 🌐 Backend
 
-The signaling server is here →
+The signaling server is open source →
 
 👉 [github.com/prudh-vi/pairup-server](https://github.com/prudh-vi/pairup-server)
+
+> Production URLs and TURN credentials 
+> are configured via environment variables.
+> See backend repo for setup instructions.
 
 ---
 
